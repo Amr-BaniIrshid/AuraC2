@@ -34,13 +34,23 @@ public class CallbackHandler {
 
         if (verdict != Verdict.ACCEPTED) {
             submission.setVerdict(verdict);
+            submission.setExecutionTime(response.getTimeAsInt());
+            submission.setMemoryUsage(response.getMemoryAsInt());
+            submissionRepository.save(submission);
+
+            return ResponseEntity.ok(
+                    "❌ Failed on Test Case " + testCaseNumber
+                            + " → Verdict = " + verdict
+            );
         }
+
         if (testCaseNumber == testCaseRepository.countByProblemId(submission.getProblem().getId())) {
             submission.setVerdict(Verdict.ACCEPTED);
+            submission.setExecutionTime(response.getTimeAsInt());
+            submission.setMemoryUsage(response.getMemoryAsInt());
+            submissionRepository.save(submission);
+            return ResponseEntity.ok("✔ All test cases passed!");
         }
-        submission.setExecutionTime(response.getTimeAsInt());
-        submission.setMemoryUsage(response.getMemoryAsInt());
-        submissionRepository.save(submission);
 
         return ResponseEntity.ok("✔ Test Case " + testCaseNumber + " passed");
     }
