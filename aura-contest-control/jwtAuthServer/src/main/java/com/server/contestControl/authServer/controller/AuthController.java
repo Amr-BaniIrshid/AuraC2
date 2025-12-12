@@ -2,6 +2,7 @@ package com.server.contestControl.authServer.controller;
 
 import com.server.contestControl.authServer.dto.login.LoginRequest;
 import com.server.contestControl.authServer.dto.login.LoginResponse;
+import com.server.contestControl.authServer.dto.logout.LogoutResponse;
 import com.server.contestControl.authServer.dto.refresh.RefreshResponse;
 import com.server.contestControl.authServer.dto.register.RegisterRequest;
 import com.server.contestControl.authServer.dto.register.RegisterResponse;
@@ -47,4 +48,13 @@ public class AuthController {
         return ResponseEntity.ok(tokens);
     }
 
+    @PostMapping("/logout")
+    public ResponseEntity<LogoutResponse> logout(
+            HttpServletRequest request,
+            HttpServletResponse response
+    ) {
+        return ResponseEntity.ok(
+                authFacade.logout(request, response)
+        );
+    }
 }

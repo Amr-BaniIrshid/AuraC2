@@ -2,10 +2,12 @@ package com.server.contestControl.authServer.service.auth;
 
 import com.server.contestControl.authServer.dto.login.LoginRequest;
 import com.server.contestControl.authServer.dto.login.LoginResponse;
+import com.server.contestControl.authServer.dto.logout.LogoutResponse;
 import com.server.contestControl.authServer.dto.refresh.RefreshResponse;
 import com.server.contestControl.authServer.enums.Role;
 import com.server.contestControl.authServer.service.email.EmailVerificationService;
 import com.server.contestControl.authServer.service.login.LoginService;
+import com.server.contestControl.authServer.service.logout.LogoutService;
 import com.server.contestControl.authServer.service.refreshToken.RefreshTokenService;
 import com.server.contestControl.authServer.service.register.RegistrationService;
 import jakarta.servlet.http.HttpServletRequest;
@@ -21,6 +23,7 @@ public class AuthFacade {
     private final LoginService loginService;
     private final EmailVerificationService verificationService;
     private final RefreshTokenService tokenRefreshService;
+    private final LogoutService logoutService;
 
     public void register(String email, String username, String password, Role role) {
         registrationService.register(email, username, password, role);
@@ -36,5 +39,13 @@ public class AuthFacade {
 
     public RefreshResponse refreshToken(HttpServletRequest req, HttpServletResponse res) {
         return tokenRefreshService.refresh(req, res);
+    }
+
+    public LogoutResponse logout(HttpServletRequest request,
+                                 HttpServletResponse response) {
+
+        logoutService.logout(request, response);
+
+        return new LogoutResponse("Logout successful");
     }
 }

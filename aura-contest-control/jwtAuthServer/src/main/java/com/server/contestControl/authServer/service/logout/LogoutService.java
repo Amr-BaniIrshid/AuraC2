@@ -5,11 +5,14 @@ import com.server.contestControl.authServer.entity.RefreshToken;
 import com.server.contestControl.authServer.entity.User;
 import com.server.contestControl.authServer.service.refreshToken.RefreshTokenRepoService;
 import com.server.contestControl.authServer.service.refreshToken.TokenOwnershipValidator;
+import com.server.contestControl.authServer.util.CookieUtil;
 import com.server.contestControl.authServer.util.TokenExtractor;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -20,19 +23,23 @@ public class LogoutService {
     private final TokenOwnershipValidator tokenOwnershipValidator;
     private final RefreshTokenRepoService refreshTokenRepoService;
 
-    public void logout(HttpServletRequest request) {
-        String oldToken = TokenExtractor.extractFromCookie(request);
-        TokenValidationResult result = tokenOwnershipValidator.validateRefreshToken(oldToken);
+    public void logout(HttpServletRequest request,
+                       HttpServletResponse response) {
 
-        User user = result.user();
+        String oldToken = TokenExtractor.extractFromCookie(request);
+        TokenValidationResult result =
+                tokenOwnershipValidator.validateRefreshToken(oldToken);
+
         RefreshToken stored = result.refreshToken();
 
         if (!stored.isRevoked()) {
             stored.setRevoked(true);
             refreshTokenRepoService.save(stored);
-            log.info("Revoked refresh token {} for user {}", stored.getId(), user.getEmail());
-        } else {
-            log.warn("Logout called with already revoked token {}", stored.getId());
+            log.info("Revoked refresh token {}", stored.getId());
         }
+
+        SecurityContextHolder.clearContext();
+        response.setHeader("Authorization", "");
+        CookieUtil.clearCookie(response, "refresh_token");
     }
 }
