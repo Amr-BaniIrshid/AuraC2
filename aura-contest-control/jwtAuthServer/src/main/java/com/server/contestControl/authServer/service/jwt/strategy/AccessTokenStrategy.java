@@ -21,12 +21,23 @@ public class AccessTokenStrategy implements TokenStrategy {
     private long expiration;
 
     @Override
-    public String generateToken(UserDetails userDetails , Long id) {
+    public String generateToken(UserDetails userDetails, Long id) {
+
+        // Extract roles / authorities
+        var authorities = userDetails.getAuthorities()
+                .stream()
+                .map(auth -> auth.getAuthority()) // e.g. ROLE_ADMIN
+                .toList();
+
         return Jwts.builder()
                 .setSubject(userDetails.getUsername())
                 .setIssuedAt(new Date())
                 .setExpiration(new Date(System.currentTimeMillis() + expiration))
                 .claim("type", "access")
+
+                // 🔑 ADD THIS
+                .claim("authorities", authorities)
+
                 .signWith(keyProvider.getAccessKey(), SignatureAlgorithm.HS256)
                 .compact();
     }

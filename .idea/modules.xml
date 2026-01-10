@@ -3,6 +3,7 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/.idea/AuraC2.iml" filepath="$PROJECT_DIR$/.idea/AuraC2.iml" />
+      <module fileurl="file://$PROJECT_DIR$/aura-contest-control/jwtAuthServer/jwtAuthServer.iml" filepath="$PROJECT_DIR$/aura-contest-control/jwtAuthServer/jwtAuthServer.iml" />
     </modules>
   </component>
 </project>

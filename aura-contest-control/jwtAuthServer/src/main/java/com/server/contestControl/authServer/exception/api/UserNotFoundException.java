@@ -4,7 +4,7 @@ import com.server.contestControl.authServer.exception.api.base.ApiException;
 import org.springframework.http.HttpStatus;
 
 public class UserNotFoundException extends ApiException {
-    public UserNotFoundException(String email) {
-        super("User with email '" + email + "' not found.", HttpStatus.NOT_FOUND);
+    public UserNotFoundException(String username) {
+        super("User with username '" + username + "' not found.", HttpStatus.NOT_FOUND);
     }
 }

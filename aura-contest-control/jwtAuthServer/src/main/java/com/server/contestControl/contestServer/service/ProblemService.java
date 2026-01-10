@@ -10,6 +10,9 @@ import com.server.contestControl.contestServer.repository.ProblemRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+import java.util.Optional;
+
 @Service
 @RequiredArgsConstructor
 public class ProblemService {
@@ -65,5 +68,18 @@ public class ProblemService {
                 .orElseThrow(() -> new RuntimeException("Problem not found"));
 
         return problem;
+    }
+
+    public List<ProblemResponse> getAllProblems(Long contestId) {
+
+        List<Problem> problems = problemRepository.findAllByContest_id(contestId);
+
+        if (problems.isEmpty()) {
+            throw new RuntimeException("No problems found for contest id " + contestId);
+        }
+
+        return problems.stream()
+                .map(ProblemResponse::from)
+                .toList();
     }
 }

@@ -1,7 +1,7 @@
 package com.server.contestControl.authServer.config;
 
-import com.server.contestControl.authServer.filter.EmailVerificationFilter;
 import com.server.contestControl.authServer.filter.JwtAuthFilter;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -22,7 +22,6 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 public class SecurityConfiguration {
 
     private final JwtAuthFilter jwtAuthFilter;
-    private final EmailVerificationFilter emailVerificationFilter;
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
@@ -34,28 +33,45 @@ public class SecurityConfiguration {
 
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(
+                                "/",
+                                "/index.html",
+                                "/assets/**",
+                                "/favicon.ico",
+
                                 "/v3/api-docs/**",
                                 "/swagger-ui/**",
                                 "/swagger-ui.html",
                                 "/swagger-resources/**",
-                                "/webjars/**"
+                                "/webjars/**",
+
+                                "/auth/**",
+                                "/verify/**",
+                                "/api/callback/judge0/**"
                         ).permitAll()
 
-                        .requestMatchers("/auth/**", "/verify/**").permitAll()
-                        .requestMatchers("/admin/**").hasRole("ADMIN")
-                        .requestMatchers("/api/contest/**").hasAnyRole("TEAM", "ADMIN")
+                        .requestMatchers(
+                                "/api/contest/active",
+                                "/api/contest/upcoming",
+                                "/api/contest/paused",
+                                "/api/contest/ended"
+                        ).permitAll()
+
+                        .requestMatchers("/api/contest/**").hasRole("ADMIN")
                         .requestMatchers("/api/submissions/**").hasAnyRole("TEAM", "ADMIN")
-                        .requestMatchers("/api/callback/judge0/**").permitAll()
 
                         .anyRequest().authenticated()
                 )
 
                 .sessionManagement(sess ->
                         sess.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                ).exceptionHandling(ex -> ex
+                .authenticationEntryPoint(
+                        (req, res, e) -> res.sendError(HttpServletResponse.SC_UNAUTHORIZED)
                 )
+        )
 
-                .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)
-                .addFilterBefore(emailVerificationFilter, JwtAuthFilter.class);
+                .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
+
 
         return http.build();
     }

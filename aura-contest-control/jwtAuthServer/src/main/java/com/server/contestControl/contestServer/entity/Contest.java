@@ -3,6 +3,8 @@ package com.server.contestControl.contestServer.entity;
 import com.server.contestControl.contestServer.enums.ContestStatus;
 import jakarta.persistence.*;
 import lombok.*;
+
+import java.time.Instant;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -19,7 +21,7 @@ public class Contest {
     private Long id;
 
     private String title;
-    private LocalDateTime startTime;
+    private Instant startTime;
     private Integer durationMinutes;
 
     @Column(columnDefinition = "TEXT")
@@ -34,7 +36,7 @@ public class Contest {
     @PrePersist
     public void prePersist() {
         if (startTime == null) {
-            startTime = LocalDateTime.now();
+            startTime = Instant.now();
         }
     }
 }

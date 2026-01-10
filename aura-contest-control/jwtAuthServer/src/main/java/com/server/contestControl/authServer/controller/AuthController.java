@@ -22,14 +22,8 @@ public class AuthController {
 
     @PostMapping("/register")
     public ResponseEntity<RegisterResponse> register(@RequestBody RegisterRequest request) {
-        authFacade.register(request.getEmail(), request.getUsername(),request.getPassword(), request.getRole());
-        return ResponseEntity.ok(new RegisterResponse("Registration successful! Please check your email for verification link."));
-    }
-
-    @GetMapping("/verify")
-    public ResponseEntity<String> verify(@RequestParam String token) {
-        String message = authFacade.verifyEmail(token);
-        return ResponseEntity.ok(message);
+        authFacade.register(request.getUsername(),request.getPassword(), request.getRole());
+        return ResponseEntity.ok(new RegisterResponse("Registration successful!"));
     }
 
     @PostMapping("/login")

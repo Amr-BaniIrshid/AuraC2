@@ -9,6 +9,12 @@ import java.util.Optional;
 
 public interface ContestRepository extends JpaRepository<Contest, Long> {
 
-    Optional<Contest> findByStatus(ContestStatus status);
     boolean existsByStatusIn(List<ContestStatus> statuses);
+    Optional<Contest> findByStatus(ContestStatus status);
+    boolean existsByStatus(ContestStatus statuses);
+
+    List<Contest> findAllByStatus(ContestStatus status);
+
+    Optional<Contest> findTopByStatusOrderByStartTimeDesc(ContestStatus status);
+
 }

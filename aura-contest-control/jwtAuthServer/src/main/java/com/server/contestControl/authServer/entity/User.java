@@ -25,19 +25,15 @@ public class User implements UserDetails {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-
-
     @Column(nullable = false, unique = true)
-    private String email;
+    private String username;
 
     @Column(nullable = false)
     private String password;
 
-    @Column(nullable = false, unique = true)
-    private String displayname;
 
 
-    private boolean emailVerified = false;
+
     private boolean accountNonLocked = true;
     private boolean credentialsNonExpired = true;
     private boolean accountNonExpired = true;
@@ -54,9 +50,6 @@ public class User implements UserDetails {
         return List.of(new SimpleGrantedAuthority("ROLE_" + role.name()));
     }
 
-    public String getUsername() {
-        return email;
-    }
     @Override
     public String getPassword() {
         return password;

@@ -17,7 +17,6 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 @Slf4j
 public class CallbackHandler {
-
     private final SubmissionRepository submissionRepository;
     private final TestCaseRepository testCaseRepository;
 
@@ -39,7 +38,7 @@ public class CallbackHandler {
             submissionRepository.save(submission);
 
             return ResponseEntity.ok(
-                    "❌ Failed on Test Case " + testCaseNumber
+                    "Failed on Test Case " + testCaseNumber
                             + " → Verdict = " + verdict
             );
         }
@@ -49,9 +48,9 @@ public class CallbackHandler {
             submission.setExecutionTime(response.getTimeAsInt());
             submission.setMemoryUsage(response.getMemoryAsInt());
             submissionRepository.save(submission);
-            return ResponseEntity.ok("✔ All test cases passed!");
+            return ResponseEntity.ok("All test cases passed!");
         }
 
-        return ResponseEntity.ok("✔ Test Case " + testCaseNumber + " passed");
+        return ResponseEntity.ok("Test Case " + testCaseNumber + " passed");
     }
 }

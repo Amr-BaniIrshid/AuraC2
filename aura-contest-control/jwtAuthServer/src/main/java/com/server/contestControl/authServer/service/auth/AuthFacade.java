@@ -5,7 +5,6 @@ import com.server.contestControl.authServer.dto.login.LoginResponse;
 import com.server.contestControl.authServer.dto.logout.LogoutResponse;
 import com.server.contestControl.authServer.dto.refresh.RefreshResponse;
 import com.server.contestControl.authServer.enums.Role;
-import com.server.contestControl.authServer.service.email.EmailVerificationService;
 import com.server.contestControl.authServer.service.login.LoginService;
 import com.server.contestControl.authServer.service.logout.LogoutService;
 import com.server.contestControl.authServer.service.refreshToken.RefreshTokenService;
@@ -21,20 +20,15 @@ public class AuthFacade {
 
     private final RegistrationService registrationService;
     private final LoginService loginService;
-    private final EmailVerificationService verificationService;
     private final RefreshTokenService tokenRefreshService;
     private final LogoutService logoutService;
 
-    public void register(String email, String username, String password, Role role) {
-        registrationService.register(email, username, password, role);
+    public void register( String username, String password, Role role) {
+        registrationService.register( username, password, role);
     }
 
     public LoginResponse login(LoginRequest req, String deviceIp, HttpServletResponse response) {
         return loginService.login(req, deviceIp, response);
-    }
-
-    public String verifyEmail(String token) {
-        return verificationService.verify(token);
     }
 
     public RefreshResponse refreshToken(HttpServletRequest req, HttpServletResponse res) {

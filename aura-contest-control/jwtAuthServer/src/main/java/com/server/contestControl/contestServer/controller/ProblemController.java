@@ -8,6 +8,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/api/problems")
 @RequiredArgsConstructor
@@ -25,5 +27,13 @@ public class ProblemController {
     @PreAuthorize("hasAnyRole('ADMIN', 'TEAM')")
     public ResponseEntity<ProblemResponse> getProblem(@PathVariable Long id) {
         return ResponseEntity.ok(problemService.getProblem(id));
+    }
+
+    @GetMapping("/contest/{id}")
+    @PreAuthorize("hasAnyRole('ADMIN', 'TEAM')")
+    public ResponseEntity<List<ProblemResponse>> getProblemsByContest(
+            @PathVariable Long id
+    ) {
+        return ResponseEntity.ok(problemService.getAllProblems(id));
     }
 }

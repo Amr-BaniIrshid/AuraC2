@@ -16,7 +16,7 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class RefreshTokenService {
 
-    private final TokenOwnershipValidator tokenOwnershipValidator;
+    private final RefreshTokenValidator refreshTokenValidator;
     private final RefreshTokenRepoService refreshTokenRepoService;
     private final TokenIssuerUtil tokenIssuerUtil;
 
@@ -25,7 +25,7 @@ public class RefreshTokenService {
         String oldToken = TokenExtractor.extractFromCookie(request);
         if (oldToken == null) throw new MissingTokenException();
 
-        TokenValidationResult result = tokenOwnershipValidator.validateRefreshToken(oldToken);
+        TokenValidationResult result = refreshTokenValidator.validate(oldToken);
         User user = result.user();
 
         refreshTokenRepoService.revokeToken(result.refreshTokenId());

@@ -22,7 +22,7 @@ public class Judge0Service {
 
     public void sendSingleTest(Submission submission, TestCase tc, int testCaseNumber, int languageId) {
 
-        var dto = new Judge0SubmissionDTO(
+        Judge0SubmissionDTO dto = new Judge0SubmissionDTO(
                 submission.getCode(),
                 languageId,
                 tc.getInputData(),

@@ -9,6 +9,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/api/contest")
 @RequiredArgsConstructor
@@ -43,15 +45,23 @@ public class ContestController {
     }
 
     @GetMapping("/active")
-    @PreAuthorize("hasAnyRole('TEAM', 'ADMIN')")
-    public ResponseEntity<ContestResponse> getActiveContest() {
+    public ResponseEntity<ContestResponse> getActive() {
         return ResponseEntity.ok(contestService.getActiveContest());
     }
 
     @GetMapping("/upcoming")
-    @PreAuthorize("hasAnyRole('ADMIN')")
-    public ResponseEntity<ContestResponse> getUpcomingContest() {
+    public ResponseEntity<ContestResponse> getUpcoming() {
         return ResponseEntity.ok(contestService.getUpcomingContest());
+    }
+
+    @GetMapping("/paused")
+    public ResponseEntity<ContestResponse> getPaused() {
+        return ResponseEntity.ok(contestService.getPausedContest());
+    }
+
+    @GetMapping("/ended")
+    public ResponseEntity<List<ContestResponse>> getEnded() {
+        return ResponseEntity.ok(contestService.getEndedContests());
     }
 
 

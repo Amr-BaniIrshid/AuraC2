@@ -16,7 +16,7 @@ public record TestCaseResponse(
                 entity.getId(),
                 entity.getInputData(),
                 entity.getExpectedOutput(),
-                entity.isPublic()   // 🔥 THIS FIXES YOUR POSTMAN ISSUE
+                entity.isPublic()   //  THIS FIXES YOUR POSTMAN ISSUE
         );
     }
 }
